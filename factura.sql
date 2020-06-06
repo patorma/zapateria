@@ -21,25 +21,40 @@ CREATE TABLE IF NOT EXISTS facturacion(
 );
 
 
-CREATE TABLE IF NOT EXISTS inventario(
-    id INT  UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    tipo_movimiento ENUM('entrada', 'salida') NOT NULL,
-    fecha DATE NOT NULL,
-    cantidad INT NOT NULL
-);
+
 
 CREATE TABLE IF NOT EXISTS productos (
      id INT  UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
      nombre VARCHAR(45) NOT NULL,
      presentacion VARCHAR(400) NOT NULL,
      valor DECIMAL(10,2) NOT NULL,
-     id_inventario INT UNSIGNED  NOT NULL,
-     id_facturacion INT UNSIGNED  NOT NULL,
-     FOREIGN KEY(id_inventario) REFERENCES inventario (id)
-      ON UPDATE CASCADE ON DELETE CASCADE,
+     id_facturacion INT UNSIGNED  NULL,
      FOREIGN KEY(id_facturacion) REFERENCES facturacion (id)
       ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS inventario(
+    id INT  UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    tipo_movimiento ENUM('entrada', 'salida') NOT NULL,
+    fecha DATE NOT NULL,
+    cantidad INT NOT NULL,
+     id_producto INT  UNSIGNED NOT NULL,
+     FOREIGN KEY (id_producto) REFERENCES productos(id)
+      ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+INSERT INTO clientes (nombre,pais) 
+ VALUES ('Patricio Contreras','Chile'),
+        ('Saul Palma','Chile'),
+        ('Rodrigo Carrasco','Chile'),
+        ('Cesar Guerrero','Argentina'),
+        ('Rodrigo carrasco','Colombia'),
+        ('Juan Perez','Chile'),
+        ('Daniela Cifuentes','Bolivia'),
+        ('Dammaris Torres','Argentina'),
+        ('Fernando Suarez','Mexico'),
+        ('Pablo Rodriguez','Chile');
+
 
 
 
