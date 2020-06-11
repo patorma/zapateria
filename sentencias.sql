@@ -1,41 +1,47 @@
 DROP DATABASE IF EXISTS libreria_cf;
-CREATE DATABASE IF NOT EXISTS libreria_cf DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS libreria_cf;
 
 USE libreria_cf;
 
 CREATE TABLE IF NOT EXISTS autores(
-    autor_id INT UNSIGNED  PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(25) NOT NULL,
-    apellido VARCHAR(25) NOT NULL,
-    seudonimo VARCHAR(50) UNIQUE,
-    genero ENUM('M','F'),
-    fecha_nacimiento DATE NOT NULL,
-    pais_origen VARCHAR(40) NOT NULL,
-    fecha_creacion DATETIME DEFAULT current_timestamp
+  autor_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(25) NOT NULL,
+  apellido VARCHAR(25) NOT NULL,
+  seudonimo VARCHAR(50) UNIQUE,
+  genero ENUM('M', 'F'),
+  fecha_nacimiento DATE NOT NULL,
+  pais_origen VARCHAR(40) NOT NULL,
+  fecha_creacion DATETIME DEFAULT current_timestamp
 );
 
-CREATE TABLE IF NOT EXISTS libros (
-    libro_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    autor_id INT UNSIGNED NOT NULL,
-    titulo VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(250),
-    paginas INTEGER UNSIGNED,
-    fecha_publicacion DATE NOT NULL,
-    fecha_creacion DATETIME DEFAULT current_timestamp,
-    FOREIGN KEY(autor_id) REFERENCES autores(autor_id)
-) ENGINE=InnoDB;
+CREATE TABLE libros(
+  libro_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  autor_id INT UNSIGNED NOT NULL,
+  titulo varchar(50) NOT NULL,
+  descripcion varchar(250) NOT NULL DEFAULT '',
+  paginas INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  fecha_publicacion Date NOT NUll,
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
+);
 
-INSERT INTO autores (nombre,apellido,seudonimo, genero,fecha_nacimiento, pais_origen)
-    VALUES ('Stephen Edwin', 'King', 'Richard Bachman', '1947-09-27', 'M', 'USA'),
+
+
+ALTER TABLE libros ADD ventas INT UNSIGNED NOT NULL DEFAULT 0;
+-- ALTER TABLE libros ADD stock INT UNSIGNED DEFAULT 10;
+
+INSERT INTO autores (nombre, apellido, seudonimo, fecha_nacimiento, genero, pais_origen )
+  VALUES ('Stephen Edwin', 'King', 'Richard Bachman', '1947-09-27', 'M', 'USA'),
          ('Joanne', 'Rowling', 'J.K Rowling', '1947-09-27', 'F', 'Reino unido'),
          ('Daniel', 'Brown',  NULL, '1964-06-22', 'M', 'USA'),
          ('John', 'Katzenbach ', NULL,'1950-06-23', 'M', 'USA'),
          ('John Ronald', 'Reuel Tolkien', NULL, '1892-01-03', 'M', 'Reino unido'),
          ('Miguel', 'de Unamuno', NULL, '1892-01-03', 'M', 'USA'),
          ('Arturo', 'Pérez Reverte', NULL, '1951-11-25', 'M', 'España'),
+         ('George Raymond', 'Richard Martin', NULL, '1948-09-20', 'M', 'USA');
 
-INSERT INTO libros(autor_id,titulo,fecha_publicacion)
-    VALUES (1, 'Carrie','1974-01-01'),
+INSERT INTO libros(autor_id, titulo, fecha_publicacion)
+VALUES (1, 'Carrie','1974-01-01'),
       (1, 'El misterio de Salmes Lot','1975-01-01'),
       (1, 'El resplando','1977-01-01'),
       (1, 'Rabia','1977-01-01'),
@@ -100,3 +106,6 @@ INSERT INTO libros(autor_id,titulo,fecha_publicacion)
 
 SELECT * FROM autores;
 SELECT * FROM libros;
+
+SELECT titulo, fecha_publicacion FROM libros 
+WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
