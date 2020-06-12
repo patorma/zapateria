@@ -25,6 +25,8 @@ CREATE TABLE libros(
   FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 );
 
+--Eliminar en cascada segunda forma de declararlo
+-- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 
 
 ALTER TABLE libros ADD ventas INT UNSIGNED NOT NULL DEFAULT 0;
@@ -107,5 +109,12 @@ VALUES (1, 'Carrie','1974-01-01'),
 SELECT * FROM autores;
 SELECT * FROM libros;
 
-SELECT titulo, fecha_publicacion FROM libros 
+SELECT  libro_id,titulo, fecha_publicacion FROM libros 
 WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
+
+
+
+SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');
+
+-- DELETE FROM libros WHERE autor_id = 1;
+

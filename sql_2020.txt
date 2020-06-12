@@ -1,0 +1,198 @@
+system cls;
+ SOURCE Downloads/zapateria/factura.sql;
+
+show create table <table>;
+Para ver más información sobre la estructura de la tabla.
+
+FOREIGN KEY (columna) REFERENCES tabla_referencia (llave_primaria);
+
+
+ Downloads/zapateria/sentencias.sql;
+
+CHARSET utf8 COLLATE utf8_spanish_ci 
+
+
+VALORES ÚNICOS
+Como sabemos, si nosotros necesitamos validar valores únicos usaremos el constraint UNIQUE.
+
+CREATE TABLE usuarios( 
+  usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(50) UNIQUE
+);
+Otra forma de expresarlo, es de la siguiente manera.
+
+CREATE TABLE usuarios( 
+  usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  nombre VARCHAR(50),
+  CONSTRAINT UNIQUE (nombre)
+);
+La palabra CONSTRAINT es opcional, sin embargo, por temas de legibilidad recomiendo colocarla.
+
+VALORES MÚTIPLES COLUMNAS
+Si necesitamos validar el valor único de una combinación de columnas lo haremos de la siguiente manera.
+
+En este caso queremos validar que la combinación de nombre, apellido y matricula sean unicas en la tabla.
+
+CREATE TABLE usuarios( 
+  usuario_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(50),
+  apellido VARCHAR(50),
+  matricula VARCHAR(10),
+  CONSTRAINT unique_combinacion UNIQUE (nombre, apellido, matricula),
+  PRIMARY KEY (usuario_id)
+);
+LLAVES PRIMARIAS
+Existen un par de formas con las cuales nosotros podemos definir un campo como una llave primaria.
+
+CREATE TABLE usuarios( 
+  usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT
+);
+o
+
+CREATE TABLE usuarios( 
+  usuario_id INT UNSIGNED AUTO_INCREMENT,
+  PRIMARY KEY(usuario_id)
+);
+En ambos casos el resultado es el mismo.
+
+--------------------------------------------------------------------
+Nosotros podemos modificar la definición de una tabla una vez esta se haya creado, para ello, nos apoyaremos de la sentencia ALTER TABLE.
+
+Aquí un listado de algunas modificaciones que podemos realizar (Las más comunes).
+
+Renombrar tabla.
+
+Renombrar la tabla usuarios por users.
+
+ALTER TABLE usuarios RENAME users;
+Agregar una nueva columna.
+
+Agregar a la tabla usuarios, la columna email de tipo VARCHAR con máximo de 50 caracteres.
+
+ALTER TABLE usuarios ADD email VARCHAR(50);
+Agregar una nueva columna con constraints.
+
+Agregar a la tabla usuarios, la columna email, validando su presencia.
+
+ALTER TABLE usuarios ADD email VARCHAR(50) NOT NULL DEFAULT '';
+Agregar a la tabla usuarios, la columna email, validando su valor único.
+
+ALTER TABLE tabla ADD columna VARCHAR(50) UNIQUE;
+Eliminar una columna
+
+Eliminar la columna email de la tabla usuarios.
+
+ALTER TABLE usuarios DROP COLUMN email;
+Modificar el tipo de dato de una columna
+
+Modificar el tipo de dato de la columna teléfono, (tabla usuarios) de INT a VARCHAR, máximo 50 caracteres.
+
+ALTER TABLE usuarios MODIFY telefono VARCHAR(50);
+Generar una llave primaria.
+
+Generar una llave primaria a la tabla usuarios.
+
+ALTER TABLE usuarios ADD id INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+Agregar llave foránea.
+
+Agregar una llave foranea a la tabla usuarios, con referencia a la tabla grupos.
+
+ALTER TABLE usuarios ADD FOREIGN KEY(grupo_id) REFERENCES grupos(grupo_id);
+Eliminar llaves foráneas
+
+Eliminar la llave foranea grupo_id de la tabla usuarios.
+
+ALTER TABLE usuarios DROP FOREIGN KEY grupo_id;
+
+Operadores lógicos 
+--------------------------------------
+ SELECT * FROM libros WHERE (autor_id = 1 AND titulo = 'Carrie') OR (autor_id = 5  AND titulo = 'El hobbit');
+
+Condicionar consultas con valores nulos
+-------------------------------------------
+ SELECT * FROM  autores WHERE seudonimo IS NULL;
+
+con operador de seguridad:
+
+ SELECT * FROM  autores WHERE seudonimo <=> NULL;
+
+Obtenemos los registros no nulos
+-----------------------------------------------------
+ SELECT * FROM  autores WHERE seudonimo IS NOT NULL; es recomendable el IS porque se puede agregar mas argumentos tipo NOT
+
+Obtener registros mediante rangos
+----------------------------------------
+SELECT titulo, fecha_publicacion FROM libros 
+WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
+
+
+Búsquedas por listas
+--------------------------------
+SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');
+
+Registros unicos
+------------------------
+SELECT DISTINCT titulo FROM libros;
+
+
+alias
+------------------------
+SELECT 9 *10; AS resultado;
+
+select autor_id AS autor,titulo AS nombre from libros AS books;     
+
+
+UPDATE 
+--------------------
+
+UPDATE libros SET descripcion = 'Nuevo cambio', ventas = 50 WHERE titulo = 'El hobbit';
+
+
+forma optima y correcta
+
+UPDATE libros SET descripcion = 'Nuevo cambio', ventas = 50 WHERE libro_id = 41;
+
+Eliminar registros
+----------------------------------------------------------------
+DELETE FROM libros WHERE autor_id = 55;
+
+
+Eliminacion en cascada
+--------------------------------------
+
+
+
+Intente comentar una respuesta mas descriptiva, pero al parecer las imagenes no las adjunta. Te comento los pasos para modificar una FOREIGN KEY en una tabla con registros.
+
+ALTER TABLE libros DROP CONSTRAINT libros_ibfk_1;
+
+ALTER TABLE libros DROP KEY autor_id;
+
+ALTER TABLE libros ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE;
+
+
+ SOURCE Downloads/zapateria/sentencias.sql;
+
+
+--Eliminar en cascada segunda forma de declararlo
+-- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
+
+
+eliminar registro de una tabla
+--------------------------------
+TRUNCATE TABLE libros;
+TRUNCATE resetea la definicion de la tabla
+
+Funciones
+Funciones sobre strings
+-----------------------------
+SELECT CONCAT(nombre,apellido) FROM autores;
+SELECT CONCAT(nombre," ", apellido) FROM autores;
+ SELECT CONCAT(nombre," ", apellido) AS nombre_completo FROM autores;
+
+SELECT LENGTH("Hola mundo");
+
+autores con nombres de caracteres mayores a 7
+SELECT * FROM autores WHERE LENGTH(nombre) > 7;
+
+
