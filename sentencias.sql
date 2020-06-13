@@ -25,7 +25,7 @@ CREATE TABLE libros(
   FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 );
 
---Eliminar en cascada segunda forma de declararlo
+-- Eliminar en cascada segunda forma de declararlo
 -- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 
 

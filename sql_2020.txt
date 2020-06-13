@@ -195,4 +195,54 @@ SELECT LENGTH("Hola mundo");
 autores con nombres de caracteres mayores a 7
 SELECT * FROM autores WHERE LENGTH(nombre) > 7;
 
+ UPPER Y LOWER
+-----------------------
+SELECT UPPER(nombre), LOWER(nombre)  FROM autores;
 
+TRIM elimina espacios de un string
+ SELECT TRIM("     cadena con espacio al inicio y al final   ");
+
+SELECT
+     LEFT("Esta es una cadena de caracteres",5) AS substring_izquierdo,
+     RIGHT("Esta es una cadena de caracteres",10) AS substring_derecho;
+
+LEFT devuelve, en este caso, los 5 primeros caracteres del string original de izquierda a derecha 
+RIGHT devuelve,en este caso, los 10 primeros caracteres del string original de derecha a izquierda
+
+obtener todos los titulos cuyo titulo comienze con la palabra harry potter
+------------------------------------------------------------------------------
+SELECT * FROM libros WHERE LEFT(titulo, 12) = 'Harry Potter'
+
+obtener todos los titulos cuyo titulo termine con anillo
+------------------------------------------------------------------------------
+
+SELECT * FROM libros WHERE RIGHT(titulo, 6) = 'anillo';
+
+Funcion RAND()
+----------------------------------------------------------
+SELECT RAND(); NUMEROS ALETORIOS ENTRE 0  Y 1
+
+SELECT ROUND() NUMEROS ALEATORIOS ENTRE  0 Y 100
+SELECT ROUND( RAND() * 100);
+
+TRUNCATE REDONDEA DECIMALES PRIMER PARAMETRO NUMERO FLOTANTE Y DECIMALES A OBTENER
+ SELECT TRUNCATE(1.123456789,3);
+
+CALCULA LA POTENCIA DE UN NUMERO primer parametro la base y el otro la potencia
+SELECT POW(2,16);
+o
+
+SELECT POWER();
+
+obtiene fecha actual
+1 SELECT now();
+2 SET @now = NOW();
+3 SELECT SECOND(@now),MINUTE(@now),HOUR(@now),MONTH(@now),YEAR(@now);
+
+si quiero convertirlo a date 
+4 select date(@now);
+ informacion de un dia en concreto
+libros creados el dia de hoy
+SELECT * FROM libros WHERE DATE(fecha_creacion) = CURDATE();
+
+select curdate();  fecha de hoy
