@@ -246,3 +246,73 @@ libros creados el dia de hoy
 SELECT * FROM libros WHERE DATE(fecha_creacion) = CURDATE();
 
 select curdate();  fecha de hoy
+
+Funcion para sumarle dias a una fecha
+
+SELECT @now + INTERVAL 30 DAY;
+
+Fecha operador(+/-) INTERVAL valor TIPO(SECOND, MINUTE,HOUR, DAY,WEEK, MONTH, YEAR);
+
+Funciones sobre condiciones
+ SELECT IF( 10 > 9, "El número si es mayor", "El número no es mayor");
+
+SELECT IF(paginas = 0, "El libro no posee páginas",paginas) FROM libros; 
+
+
+UPDATE libros SET paginas = 10 WHERE libro_id > 20;
+SELECT IF(paginas = 0, "El libro no posee páginas",paginas) FROM libros;   
+
+// Evaluar si una condicion es null
+SELECT IFNULL(seudonimo, "El autor no cuenta con un seudonimo") FROM autores;
+
+crear funciones
+------------------------
+
+crear funcion que nos permita agregar dias a una fecha 
+
+DELIMITER //
+CREATE FUNCTION agregar_dias(fecha DATE,dias INT)
+-- Se indica que tipo de dato retorna la funcion
+RETURNS DATE
+BEGIN
+    RETURN fecha + INTERVAL dias DAY;
+END//
+DELIMITER ;
+
+listar funciones
+SHOW FUNCTION STATUS WHERE db = database() AND type = "FUNCTION"\G;
+
+
+
+DELIMITER //
+
+CREATE FUNCTION obtener_paginas()
+RETURNS INT
+BEGIN
+  SET @paginas = (SELECT (ROUND( RAND() * 100 ) * 4 ));
+  RETURN @paginas;
+END//
+
+
+eliminar funcion
+DROP FUNCTION agregar_dias;
+ctrl
+
+Ejecutar sentencias dentro de funciones
+funcion para establecer la cantidad de paginas de un libro
+
+
+DELIMITER //
+
+CREATE FUNCTION obtener_paginas()
+RETURNS INT
+BEGIN
+  SET @paginas = (SELECT (ROUND( RAND() * 100 ) * 4 ));
+  RETURN @paginas;
+END//
+
+DELIMITER ;
+
+UPDATE libros SET paginas = obtener_paginas();
+
+select * from libros\G;  con la \G mostramos la consultas por cards
