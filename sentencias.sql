@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS libreria_cf;
-CREATE DATABASE IF NOT EXISTS libreria_cf;
+CREATE DATABASE IF NOT EXISTS libreria_cf CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 USE libreria_cf;
 
@@ -118,3 +118,15 @@ SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La to
 
 -- DELETE FROM libros WHERE autor_id = 1;
 
+-- Obtener todos los libros cuyo titulo comienze con la letra h o con la letra l
+-- forma no optima
+
+
+-- SELECT autor_id,titulo FROM libros WHERE titulo LIKE 'H%' OR titulo LIKE 'L%';
+-- SELECT autor_id,titulo FROM libros WHERE LEFT(titulo,1) = 'H' OR LEFT(titulo,1) = 'L';
+
+-- EXPRESIONES REGULARES
+--  SELECT titulo FROM libros WHERE titulo REGEXP '^[HL]';
+
+-- Y asi sucesivamente 
+-- SELECT titulo FROM libros WHERE titulo REGEXP '^[HLAVTZ]';
