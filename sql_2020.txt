@@ -363,5 +363,45 @@ Y asi sucesivamente
 SELECT titulo FROM libros WHERE titulo REGEXP '^[HLAVTZ]';
 
 
+Ordenamiento de registros
+------------------------------
+SELECT titulo FROM libros ORDER BY titulo;
+
+Ordenar en forma descendente
+-----------------------
+SELECT titulo FROM libros ORDER BY titulo DESC;
+
+
+Ordenar en forma ascendente
+---------------------------------
+ SELECT titulo FROM libros ORDER BY titulo ASC;
+
+Ordenar en forma descendente números
+------------------------------------
+ SELECT libro_id, titulo FROM libros ORDER BY libro_id DESC;
+
+Ordenar por condicion and
+----------------------------------------------------------------------
+ SELECT libro_id, titulo FROM libros ORDER BY libro_id AND titulo ASC;
+
+
+ Limitar registros
+-----------------------------------
+SELECT titulo FROM libros LIMIT 10;  a 10
+
+obtener el titulo de los primeros 5 libros escritos por el auttor de id 2
+primero va la condicion y despues el limit
+ SELECT titulo FROM libros WHERE autor_id = 2 LIMIT 5;
+
+
+paginar resultados  
+ SELECT libro_id, titulo FROM libros LIMIT 0,5;
+
+SELECT libro_id, titulo FROM libros LIMIT 5,5;
+
+SELECT libro_id, titulo FROM libros LIMIT 10,5;
+ 
+
+ver ¿Qué son las funciones de agreación?
 
 
