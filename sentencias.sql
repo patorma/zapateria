@@ -30,7 +30,7 @@ CREATE TABLE libros(
 
 
 ALTER TABLE libros ADD ventas INT UNSIGNED NOT NULL DEFAULT 0;
--- ALTER TABLE libros ADD stock INT UNSIGNED DEFAULT 10;
+ALTER TABLE libros ADD stock INT UNSIGNED DEFAULT 10;
 
 INSERT INTO autores (nombre, apellido, seudonimo, fecha_nacimiento, genero, pais_origen )
   VALUES ('Stephen Edwin', 'King', 'Richard Bachman', '1947-09-27', 'M', 'USA'),
@@ -130,3 +130,6 @@ SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La to
 
 -- Y asi sucesivamente 
 -- SELECT titulo FROM libros WHERE titulo REGEXP '^[HLAVTZ]';
+
+-- SOURCE Downloads/zapateria/funciones.sql;
+-- SET GLOBAL log_bin_trust_function_creators = 1;

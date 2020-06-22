@@ -404,4 +404,56 @@ SELECT libro_id, titulo FROM libros LIMIT 10,5;
 
 ver ¿Qué son las funciones de agreación?
 
+Contar la cantidad de autores de libros 
+SELECT COUNT(*)  FROM autores;
+
+SELECT COUNT(*) AS total  FROM autores;
+
+CONTAR TODOS ,LOS AUTORES QUE TENGAN SEUDONIMOS
+ SELECT COUNT(*) AS total  FROM autores WHERE seudonimo IS NOT NULL;
+
+Se puede agregar columnas la misma consulta de arriba pero sin condicion
+obtener la cantidad de autores que posean algun seudonimo
+SELECT COUNT(seudonimo) AS total FROM autores;
+
+Con las funciones de agregacion se trabajan las columnas siempre y cuando el registro posea algun valor si el registro no tiene valor o
+es null no es tomado en cuenta
+
+DELIMITER //
+CREATE FUNCTION obtener_ventas() 
+RETURNS INT
+BEGIN
+  SET @paginas = (SELECT (ROUND(RAND() * 100) * 6));
+  RETURN @paginas;
+END//;
+DELIMITER ;
+
+funcion de agregacion de sum
+SELECT SUM(ventas) FROM libros;
+
+Funciones de agregacion MIN MAX
+
+El libro que tuvo mayor venta
+SELECT MAX(ventas) FROM libros;
+
+El libro que tuvo menor venta
+SELECT MIN(ventas) FROM libros;
+
+
+AVG Saca promedio de ventas
+ SELECT AVG(ventas) FROM libros;
+
+solo devuelven un solo valor
+
+agrupamiento
+------------------------------------------
+
+agrupamos por autor (autor_id) cuantos libros se vendieron
+SELECT autor_id, SUM(ventas) FROM libros GROUP BY autor_id;
+
+
+
+SELECT autor_id, SUM(ventas) AS total FROM libros GROUP BY autor_id ORDER BY  total DESC LIMIT 1;
+
+Despues de agrupar se agregan las funciones de agregacion
 
