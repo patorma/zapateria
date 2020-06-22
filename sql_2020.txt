@@ -457,3 +457,25 @@ SELECT autor_id, SUM(ventas) AS total FROM libros GROUP BY autor_id ORDER BY  to
 
 Despues de agrupar se agregan las funciones de agregacion
 
+condiciones bajo agrupamiento
+--------------------------------------
+no se puede condicionar una funcion de agregacion con la clausula WHERE: 
+ejemplo:
+
+SELECT autor_id, SUM(ventas) AS total FROM libros WHERE SUM(ventas)> 100 GROUP BY autor_id;
+lo anterior esta malo ya que las funciones de agregacion se ejecutan despues de un grupo de datos
+la condicion where se ejecuta antes de las funciones de agregacion la forma correcta e con HAVING
+la solucion a lo anterior seria con la siguiente query:
+
+Obtener todos los autores que hayan vendido más de 100 ejemplares:
+SELECT autor_id, SUM(ventas) AS total FROM libros  GROUP BY autor_id HAVING SUM(ventas) > 100;
+
+HAVING  es una clausula de soporte a la clausula WHERE nos permitira realizar filtros sobre un grupo de datos
+nos permite utilizar las funciones de agregacion (SUM,COUNT,MIN, MAX) 
+
+
+Unir resultados
+----------------------------------------------------------------------------------
+ SELECT CONCAT(nombre," ",apellido) FROM autores
+ UNION
+  SELECT CONCAT(nombre," ",apellidos) FROM usuarios;

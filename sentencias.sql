@@ -25,6 +25,15 @@ CREATE TABLE libros(
   FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 );
 
+CREATE TABLE usuarios(
+  usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  nombre varchar(25) NOT NULL,
+  apellidos varchar(25),
+  username varchar(25) NOT NULL,
+  email varchar(50) NOT NULL,
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Eliminar en cascada segunda forma de declararlo
 -- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
 
@@ -106,8 +115,15 @@ VALUES (1, 'Carrie','1974-01-01'),
       (8, 'Festin de cuervos','2011-07-12'),
       (8, 'Danza de dragones','2011-07-12');
 
+      INSERT INTO usuarios (nombre, apellidos, username, email)
+VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
+        ('Codi1', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
+        ('Codi2', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
+        ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com');
+
 SELECT * FROM autores;
 SELECT * FROM libros;
+SELECT * FROM usuarios;
 
 SELECT  libro_id,titulo, fecha_publicacion FROM libros 
 WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
