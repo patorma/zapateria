@@ -479,3 +479,16 @@ Unir resultados
  SELECT CONCAT(nombre," ",apellido) FROM autores
  UNION
   SELECT CONCAT(nombre," ",apellidos) FROM usuarios;
+
+
+En la union debe tener las mismas columnas
+
+solucion
+ SELECT CONCAT(nombre," ",apellido) AS nombre_completo, ""  AS email FROM autores
+ UNION
+  SELECT CONCAT(nombre," ",apellidos) AS nombre_completo, email FROM usuarios;
+
+
+ SELECT CONCAT(nombre," ",apellido) AS nombre_completo, "", pais_origen AS email FROM autores
+ UNION
+  SELECT CONCAT(nombre," ",apellidos) AS nombre_completo, email , "" FROM usuarios;
