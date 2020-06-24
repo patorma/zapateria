@@ -492,3 +492,50 @@ solucion
  SELECT CONCAT(nombre," ",apellido) AS nombre_completo, "", pais_origen AS email FROM autores
  UNION
   SELECT CONCAT(nombre," ",apellidos) AS nombre_completo, email , "" FROM usuarios;
+-----------------------------------------------------------------------------------------------
+
+DELIMITER //
+CREATE FUNCTION obtener_ventas() 
+RETURNS INT
+BEGIN
+  SET @paginas = (SELECT (ROUND( RAND() * 100) * 6));
+  RETURN @paginas;
+END//
+
+subconsultas
+problematica :
+Obtener el nombre completo de todos los autores cuyos valores hayan superado el promedio
+
+Introduccion:
+SET @promedio = (SELECT AVG(ventas) FROM libros);
+
+SELECT 
+autor_id 
+FROM libros
+ GROUP BY autor_id 
+ HAVING SUM(ventas) >  @promedio;
+
+ahora veamos como hacer esto con subconsultas;
+
+SELECT <-- esta se ejecuta despues 
+autor_id 
+FROM libros
+ GROUP BY autor_id 
+ HAVING SUM(ventas) > (SELECT AVG(ventas) FROM libros);<--- esta se ejecuta primero
+
+El orden en la que se ejecutan las subconsultas son del nivel mas bajo al mas alto
+
+Finalmente la solucion a la problematica planteada para la pregunta para subconsulta es:
+
+SELECT CONCAT(nombre, " ", apellido) AS nombre <-- esta se ejecuta al final(subconsulta principal)
+FROM autores
+WHERE autor_id IN(
+SELECT <-- esta se ejecuta en segundo lugar
+autor_id 
+FROM libros
+ GROUP BY autor_id 
+ HAVING SUM(ventas) > (SELECT AVG(ventas) FROM libros)); <--- esta se ejecuta primero
+
+la primera subconsulta devuelve el promedio
+la segunda una lista de id 
+y la principal el nombre completo en base a una lista 
