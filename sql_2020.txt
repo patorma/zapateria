@@ -539,3 +539,14 @@ FROM libros
 la primera subconsulta devuelve el promedio
 la segunda una lista de id 
 y la principal el nombre completo en base a una lista 
+
+Obtener el mensaje Disponible si el libro de titulo el hobbit se encuentra en nuestra tabla libros
+en caso contrario ontener el mensaje No Disponible 
+
+SELECT IF(
+   EXISTS(SELECT libro_id FROM libros WHERE titulo = 'El hobbit'),
+   'Disponible',
+   'No Disponible'
+ ) AS mensaje;
+
+

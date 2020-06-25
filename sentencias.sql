@@ -121,16 +121,6 @@ VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
         ('Codi2', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
         ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com');
 
-SELECT * FROM autores;
-SELECT * FROM libros;
-SELECT * FROM usuarios;
-
-SELECT  libro_id,titulo, fecha_publicacion FROM libros 
-WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
-
-
-
-SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');
 
 -- DELETE FROM libros WHERE autor_id = 1;
 
@@ -147,5 +137,17 @@ SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La to
 -- Y asi sucesivamente 
 -- SELECT titulo FROM libros WHERE titulo REGEXP '^[HLAVTZ]';
 
--- SOURCE Downloads/zapateria/funciones.sql;
--- SET GLOBAL log_bin_trust_function_creators = 1;
+
+SET GLOBAL log_bin_trust_function_creators = 1;
+SOURCE Downloads/zapateria/funciones.sql;
+
+SELECT * FROM autores;
+SELECT * FROM libros;
+SELECT * FROM usuarios;
+
+SELECT  libro_id,titulo, fecha_publicacion FROM libros 
+WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
+
+
+
+SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');

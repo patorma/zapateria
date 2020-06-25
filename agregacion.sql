@@ -27,3 +27,13 @@ autor_id
 FROM libros
  GROUP BY autor_id 
  HAVING SUM(ventas) > (SELECT AVG(ventas) FROM libros));
+
+ Disponible
+ Agotado
+ El hobbit
+
+ SELECT IF(
+   EXISTS(SELECT libro_id FROM libros WHERE titulo = 'El hobbit'),
+   'Disponible',
+   'No Disponible'
+ ) AS mensaje;
