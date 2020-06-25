@@ -549,4 +549,13 @@ SELECT IF(
    'No Disponible'
  ) AS mensaje;
 
+Ejercicios Base de datos de CodigoFacilito
+-------------------------------------------------
+1 SELECT titulo,autor_id  
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL GROUP BY autor_id
+);
 

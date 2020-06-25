@@ -1,0 +1,30 @@
+SELECT CONCAT(nombre, " ", apellido) AS nombre 
+FROM autores
+WHERE autor_id IN(
+SELECT 
+autor_id 
+FROM libros
+ GROUP BY autor_id 
+ HAVING SUM(ventas) > (SELECT AVG(ventas) FROM libros));
+
+
+SELECT IF(
+   EXISTS(SELECT libro_id FROM libros WHERE titulo = 'El hobbit'),
+   'Disponible',
+   'No Disponible'
+ ) AS mensaje;
+
+SELECT COUNT(*) AS total  FROM autores WHERE seudonimo IS NOT NULL;
+
+SELECT seudonimo FROM autores WHERE seudonimo IS NOT NULL;
+
+SELECT titulo,autor_id  
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL GROUP BY autor_id
+);
+
+
+(SELECT autor_id,seudonimo FROM autores WHERE seudonimo IS NOT NULL);
