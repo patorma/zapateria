@@ -26,5 +26,38 @@ WHERE autor_id IN (
  WHERE seudonimo IS NOT NULL GROUP BY autor_id
 );
 
+SELECT titulo,autor_id, fecha_publicacion,fecha_creacion  
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL GROUP BY autor_id
+) and DATE(fecha_publicacion) = CURDATE();
+
 
 (SELECT autor_id,seudonimo FROM autores WHERE seudonimo IS NOT NULL);
+
+
+obtiene fecha actual
+1 SELECT now();
+2 SET @now = NOW();
+3 SELECT SECOND(@now),MINUTE(@now),HOUR(@now),MONTH(@now),YEAR(@now);
+
+si quiero convertirlo a date 
+4 select date(@now);
+ informacion de un dia en concreto
+libros creados el dia de hoy
+SELECT * FROM libros WHERE DATE(fecha_creacion) = YEAR();
+
+select curdate();  fecha de hoy
+
+Funcion para sumarle dias a una fecha
+
+SELECT @now + INTERVAL 30 DAY;
+
+Fecha operador(+/-) INTERVAL valor TIPO(SECOND, MINUTE,HOUR, DAY,WEEK, MONTH, YEAR);
+
+Funciones sobre condiciones
+ SELECT IF( 10 > 9, "El número si es mayor", "El número no es mayor");
+
+SELECT IF(paginas = 0, "El libro no posee páginas",paginas) FROM libros; 

@@ -28,7 +28,7 @@ CREATE TABLE libros(
 CREATE TABLE usuarios(
   usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   nombre varchar(25) NOT NULL,
-  apellidos varchar(25),
+  apellidos varchar(25) NOT NULL,
   username varchar(25) NOT NULL,
   email varchar(50) NOT NULL,
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP

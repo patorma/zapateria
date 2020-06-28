@@ -551,11 +551,145 @@ SELECT IF(
 
 Ejercicios Base de datos de CodigoFacilito
 -------------------------------------------------
-1 SELECT titulo,autor_id  
+
+LIBROS
+-------------------------------------------------------
+
+1 Obtener todos los libros escritos por autores que cuenten con un seudónimo.
+SELECT titulo,autor_id  
 FROM  libros
 WHERE autor_id IN (
   SELECT autor_id
  FROM autores
- WHERE seudonimo IS NOT NULL GROUP BY autor_id
-);
+ WHERE seudonimo IS NOT NULL 
+)GROUP BY libro_id;
+
+solucion alternativa con inner join 
+
+SELECT (l.titulo) as titulo,(l.autor_id) as autor_id,CONCAT(a.nombre, " ", a.apellido) AS nombre_autor FROM 
+ libros l inner join autores a on(l.autor_id = a.autor_id)
+  WHERE a.seudonimo IS NOT NULL GROUP BY l.titulo; 
+
+
+2 Obtener el título de todos los libros publicados en el año actual cuyos autores poseen un pseudónimo.
+SELECT titulo,autor_id, fecha_publicacion,fecha_creacion  
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL 
+) and DATE(fecha_publicacion) = CURDATE() GROUP BY titulo ;
+
+
+3 Obtener todos los libros escritos por autores que cuenten con un seudónimo y que hayan nacido ante de 1965.
+SELECT titulo,autor_id  
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL and fecha_nacimiento < '1965-12-31' 
+) GROUP BY titulo;
+  
+  <> = diferente | <=> = igual
+4 Colocar el mensaje no disponible a la columna descripción, en todos los libros publicados antes del año 2000.
+UPDATE libros SET descripcion = 'no disponible' WHERE fecha_publicacion < '2000-01-01';
+
+5 Obtener la llave primaria de todos los libros cuya descripción sea diferente de no disponible.
+SELECT libro_id FROM libros WHERE descripcion <> 'no disponible'; 
+
+6 Obtener el título de los últimos 3 libros escritos por el autor con id 2.
+
+  SELECT titulo FROM libros WHERE autor_id = 2 
+obtener el titulo de los primeros 5 libros escritos por el auttor de id 2
+primero va la condicion y despues el limit
+ SELECT titulo FROM libros WHERE autor_id = 2 LIMIT 5;
+
+La solucion definitiva
+SELECT libro_id, titulo,fecha_publicacion FROM libros WHERE autor_id = 2 GROUP BY libro_id 
+ ORDER BY libro_id desc LIMIT 3;
+
+7 Obtener en un mismo resultado la cantidad de libros escritos por autores con seudónimo y sin seudónimo.
+SET @seudonimo = (SELECT COUNT(titulo) AS con_seudonimo
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NOT NULL
+));
+SET @no_seudonimo = (SELECT COUNT(titulo) AS sin_seudonimo
+FROM  libros
+WHERE autor_id IN (
+  SELECT autor_id
+ FROM autores
+ WHERE seudonimo IS NULL 
+));
+
+SELECT @seudonimo AS con_seudonimo,  @no_seudonimo AS sin_seudonimo;
+
+8 Obtener la cantidad de libros publicados entre enero del año 2000 y enero del año 2005.
+
+SELECT COUNT(libro_id) AS cantidad FROM libros WHERE fecha_publicacion  BETWEEN '2000-01-01' AND '2005-01-31';
+
+
+
+9 Obtener el título y el número de ventas de los cinco libros más vendidos.
+
+SELECT libro_id,titulo,ventas FROM libros GROUP BY libro_id ORDER BY ventas DESC LIMIT 5 ;
+
+
+10 Obtener el título y el número de ventas de los cinco libros más vendidos de la última década.
+
+SELECT libro_id,titulo,ventas,fecha_publicacion FROM libros
+ WHERE fecha_publicacion BETWEEN '2010-01-01' AND '2020-06-30' 
+GROUP BY libro_id ORDER BY ventas DESC LIMIT 5;
+
+
+11 Obtener la cantidad de libros vendidos por los autores con id 1, 2 y 3.
+
+SET @venta1 = (SELECT SUM(ventas) AS ventas_autor_id_1 FROM libros WHERE autor_id=1);
+
+SET @venta2 =(SELECT SUM(ventas) AS ventas_autor_id_2 FROM libros WHERE autor_id=2);
+
+SET @venta3 =(SELECT SUM(ventas) AS ventas_autor_id_3 FROM libros WHERE autor_id=3);
+
+La solucion a la pregunta 11 es: 
+
+SELECT autor_id AS autor, SUM(ventas) AS ventas
+FROM libros
+ WHERE autor_id = 1
+ UNION  
+SELECT  autor_id, SUM(ventas) 
+FROM libros 
+WHERE autor_id = 2 
+UNION SELECT autor_id, SUM(ventas) 
+FROM libros
+WHERE autor_id = 3;
+
+12 Obtener el título del libro con más páginas.
+SELECT titulo FROM libros WHERE paginas IN(SELECT MAX(paginas) FROM libros);
+
+13 Obtener todos los libros cuyo título comience con la palabra “La”.
+
+SELECT titulo FROM libros WHERE titulo LIKE 'la%';
+
+14 Obtener todos los libros cuyo título comience con la palabra “La” y termine con la letra “a”.
+
+ SELECT titulo FROM libros WHERE titulo LIKE 'la%%a';
+
+15 Establecer el stock en cero a todos los libros publicados antes del año de 1995
+
+UPDATE libros SET stock = 0 WHERE fecha_publicacion < '1995-01-01';
+
+16 Mostrar el mensaje Disponible si el libro con id 1 posee más de 5 ejemplares en stock, 
+en caso contrario mostrar el mensaje No disponible.
+
+SELECT IF(
+  EXISTS( SELECT libro_id FROM libros WHERE libro_id = 1 AND stock > 5),
+  'Disponible',
+   'No Disponible'
+)AS mensaje;
+
+17 Obtener el título los libros ordenados por fecha de publicación del más reciente al más viejo.
+
+SELECT libro_id,titulo,fecha_publicacion FROM libros GROUP BY libro_id ORDER BY fecha_publicacion DESC;
 
