@@ -33,6 +33,14 @@ CREATE TABLE usuarios(
   email varchar(50) NOT NULL,
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE libros_usuarios(
+  libro_id INT UNSIGNED NOT NULL,
+  usuario_id INT UNSIGNED NOT NULL,
+
+  FOREIGN KEY (libro_id) REFERENCES libros(libro_id),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Eliminar en cascada segunda forma de declararlo
 -- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
@@ -122,6 +130,9 @@ VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
         ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com');
 
 
+INSERT INTO libros_usuarios(libro_id, usuario_id)
+VALUES  (1, 1), (2, 1), (3, 1),
+        (55, 3), (55, 3), (55, 3);
 -- DELETE FROM libros WHERE autor_id = 1;
 
 -- Obtener todos los libros cuyo titulo comienze con la letra h o con la letra l

@@ -693,3 +693,152 @@ SELECT IF(
 
 SELECT libro_id,titulo,fecha_publicacion FROM libros GROUP BY libro_id ORDER BY fecha_publicacion DESC;
 
+AUTORES
+-------------------------------------------------------
+1 Obtener el nombre de los autores cuya fecha de nacimiento sea posterior a 1950
+
+SELECT autor_id, CONCAT(nombre, " ", apellido)AS nombre, fecha_nacimiento 
+FROM autores 
+WHERE 
+fecha_nacimiento > '1950-12-31'
+GROUP BY autor_id;
+
+2 Obtene el nombre completo y la edad de todos los autores.
+
+// se obtiene la fecha actual
+SET @now = NOW();
+
+ SELECT autor_id, CONCAT(nombre, " ", apellido)AS nombre, (YEAR(@now)-YEAR(fecha_nacimiento)) AS edad FROM autores;
+
+3 Obtener el nombre completo de todos los autores cuyo último libro publicado sea posterior al 2005
+
+SELECT autor_id,CONCAT(nombre, " ", apellido)AS nombre_completo
+FROM autores WHERE autor_id IN(
+ SELECT autor_id FROM libros WHERE fecha_publicacion > '2005-12-31' 
+);
+
+
+4 Obtener el id de todos los escritores cuyas ventas en sus libros superen el promedio
+ SELECT autor_id FROM libros GROUP BY autor_id HAVING SUM(ventas) > (SELECT AVG(ventas) FROM libros);
+
+5 Obtener el id de todos los escritores cuyas ventas en sus libros sean mayores a cien mil ejemplares.
+ SELECT autor_id FROM libros GROUP BY autor_id HAVING SUM(ventas) > 100000;
+
+
+funciones
+----------------------------------
+
+Crear una función la cual nos permita saber si un libro es candidato a préstamo o no.
+ Retornar “Disponible” si el libro posee por lo menos un ejemplar en stock, 
+en caso contrario retornar “No disponible.”
+
+DELIMITER //
+
+CREATE FUNCTION ver_stock8(id_libro INT UNSIGNED)
+RETURNS VARCHAR(20)
+BEGIN
+   SET @stock = (
+	SELECT IF(
+	EXISTS(SELECT libro_id FROM libros WHERE libro_id = id_libro and stock >=1),
+	 'Disponible',
+         'No Disponible'
+            )AS mensaje
+
+    );
+
+RETURN @stock;
+  
+END//
+
+DELIMITER ;
+
+
+JOIN  se obtiene registros de la union de dos tablas , los registros pueden encontrarse en la interseccion de ambas 
+------------------------------------------------------
+---------------------------------------------------------
+Obtener el titulo de todos los libros y el nombre completo de su autor
+SELECT
+    li.titulo, 
+    CONCAT(au.nombre, " ", au.apellido) AS nombre_autor,
+    li.fecha_creacion
+ FROM libros AS li
+INNER JOIN autores AS au ON li.autor_id = au.autor_id;
+
+Sub clausula using
+---------------------
+SELECT
+    libros.titulo, 
+    CONCAT(autores.nombre, " ", autores.apellido) AS nombre_autor,
+    libros.fecha_creacion
+ FROM libros 
+INNER JOIN autores USING(autor_id);
+En lo anterior se usa using porque autor_id es compartido en las dos tablas
+
+pero ON permite condicionar la union de tablas ejemplo:
+Obtener el titulo de todos los libros, el nombre completo de todos los autores siempre y cuando dicho autor  cuente con un seudonimo
+
+SELECT
+    libros.titulo, 
+    CONCAT(autores.nombre, " ", autores.apellido) AS nombre_autor,
+    libros.fecha_creacion
+ FROM libros 
+INNER JOIN autores ON libros.autor_id = autores.autor_id
+           AND autores.seudonimo IS NOT NULL; se agregan mas condiciones
+
+Lo anterior no se puede condiconar con using 
+
+
+En resumen con ON se puede condicionar más columnas y con USING no
+
+
+Left Join
+................................................
+LEFT JOIN 
+LEFT OUTER JOIN  Son exactamente lo mismo 
+
+LEFT JOIN se obtiene registros de la union de dos tablas , los registros pueden encontrarse en la interseccion de ambas o como
+solo la tabla A (tabla del lado izquierdo)
+
+
+en la libreria los usuarios pueden prestar libros , un usuario podra prestar más de un titulo
+asi como un titulo podra ser prestado a mas de un usuario osea la relacion de ambas tablas sera
+
+usuarios
+libros
+
+De muchos a muchos 
+
+obtener el nombre completo de los usuarios y el id de los libros prestados 
+
+usuarios = a
+libros_usuarios = b
+
+SELECT 
+    CONCAT(nombre," ",apellidos),
+    libros_usuarios.libro_id 
+FROM usuarios
+LEFT JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id;
+lo null on los registros del lado izquierdo (usuarios)
+
+Usuarios que han prestado libros
+
+SELECT 
+    CONCAT(nombre," ",apellidos),
+    libros_usuarios.libro_id 
+FROM usuarios
+LEFT JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id
+WHERE libros_usuarios.libro_id IS NOT NULL;
+
+que no han prestado libros
+
+SELECT 
+    CONCAT(nombre," ",apellidos),
+    libros_usuarios.libro_id 
+FROM usuarios
+LEFT JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id
+WHERE libros_usuarios.libro_id IS NULL;
+
+
+
+Right Join
+------------
