@@ -162,3 +162,5 @@ WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
 
 
 SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');
+
+SOURCE Downloads/zapateria/vistas.sql;

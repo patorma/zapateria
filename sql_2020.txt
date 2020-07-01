@@ -842,3 +842,116 @@ WHERE libros_usuarios.libro_id IS NULL;
 
 Right Join
 ------------
+Right Join y Right OUTER Join son lo mismo
+se obtiene registro de la union de dos tablas los registros pueden encontrase en la interseccion de ambas 
+como en la tabla de la derecha
+
+Se obtiene todos los usuarios que no han prestado un libro
+SELECT 
+    CONCAT(nombre," ",apellidos),
+    libros_usuarios.libro_id 
+FROM libros_usuarios
+RIGHT JOIN usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id
+WHERE libros_usuarios.libro_id IS NULL;
+
+A diferencia del anterior muestra tanto los registros del lado derecho como de la interseccion de las dos tablas
+que coincide con usuario_id
+SELECT 
+    CONCAT(nombre," ",apellidos),
+    libros_usuarios.libro_id 
+FROM libros_usuarios
+RIGHT JOIN usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id;
+
+multiples join
+---------------------
+
+obtener el nombre completo de los usuarios que hayan prestado un libro. El libro debio haber sido escrito
+por un autor con seudonimo y ademas el prestamo debe de haberse realizado el dia de hoy
+Se trabajaran con 4 tablas:
+
+usuarios
+libros_usuarios
+libros
+autores
+
+
+-- multiples join
+-- ---------------------
+-- 1 seleccionar nombres de usuarios
+-- 2 obtener todos los usuarios que hayan realizado un prestamo
+-- 3 listarlibros prestados con autores con seudonimo
+-- 4  prestamos que fueron realizados el dia de hoy
+
+SELECT DISTINCT
+    CONCAT(usuarios.nombre, " ",usuarios.apellidos) AS nombre_usuario
+FROM usuarios
+INNER JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id;
+
+Quedando de la siguiente manera:
+
+SELECT DISTINCT
+    CONCAT(usuarios.nombre, " ",usuarios.apellidos) AS nombre_usuario
+FROM usuarios
+INNER JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id
+            AND DATE(libros_usuarios.fecha_creacion) = CURDATE() 
+INNER JOIN libros ON libros_usuarios.libro_id = libros.libro_id
+INNER JOIN autores ON libros.autor_id = autores.autor_id 
+            AND autores.seudonimo IS NOT NULL;
+
+Productos Cartesianos
+------------------------------
+
+Es el resultado de unir multiples tablas sin especificar ninguna condicion de union 
+se trabaja con CROSS JOIN   
+
+SE GENERARA UN PRODUCTO CARTESIANO ENTRE USUARIOS Y LIBROS  
+SELECT usuarios.username, libros.titulo FROM usuarios CROSS JOIN libros ORDER BY username DESC;   
+
+Esto puede servir para ingresar estos resultados que arroja esta query 
+
+Insertar el resultado de la query anterior dentro de una tabla mediante CROSS JOIN 
+
+INSERT INTO libros_usuarios (libro_id,usuario_id) SELECT libro_id,usuario_id FROM usuarios CROSS JOIN libros;
+
+vistas (relacionado a seguridad)
+-------------------------------------------
+
+la vista es un mecanismo que permite consultar datos a diferencias de las tablas en las vistas no se almacenan
+los datos por lo que no hay que preocuparse de que las vistas tienen espacio en la memoria 
+
+
+crear vistas
+
+vista que nos permita conocer a todos los usuarios que han prestado libros en la ultima semana 
+asi como la cantidad de libros prestados. No nos interesa los titulos prestados.
+
+antes de crear la vista se debe generar la consulta
+como nos interesa la cantidad no usaremos distinct sino group BY
+una vez que agrupemos por el id es contar los registros 
+y despues se genera una vista a partir de la consulta 
+
+CREATE VIEW prestamos_usuarios_vw AS
+SELECT
+usuarios.usuario_id,
+usuarios.nombre,
+usuarios.email,
+usuarios.username,
+COUNT(usuarios.usuario_id) AS total_prestamos
+FROM
+usuarios
+INNER JOIN libros_usuarios ON usuarios.usuario_id = libros_usuarios.usuario_id
+GROUP BY usuarios.usuario_id;
+
+para listar todas nuestras vistas con SHOW TABLES;
+Y despues con select se consulta sus registros  como si fuera una tabla
+
+SELECT * FROM prestamos_usuarios_vw;
+
+obtener todos los usuarioscuyos prestamos hayan sido mayor  4 
+
+SELECT * FROM prestamos_usuarios_vw WHERE total_prestamos > 4;
+
+ELIMINAR UNA Vista :
+DROP VIEW nombre_vista
+
+
