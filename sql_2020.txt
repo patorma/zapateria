@@ -1096,3 +1096,62 @@ INNER JOIN libros AS li  ON li.libro_id = lu.libro_id
 GROUP BY lu.libro_id
 ORDER BY COUNT(lu.libro_id) DESC
 LIMIT 0,1;
+
+
+Procedimientos almacenados
+-------------------------------------------------------------
+------------------------------------------------------------
+
+Son rutinas que se ejecutan directamente en el motor de la bd , no retornan valores
+
+generar procedimiento almacenado que permita prestar libros
+usuario id que hara prestamo y libro_id libro que va hacer prestado 
+
+DELIMITER  //
+
+CREATE PROCEDURE prestamo(usuario_id INT, libro_id INT)
+BEGIN
+    INSERT INTO libros_usuarios(libro_id,usuario_id) VALUES (libro_id, usuario_id);
+    UPDATE libros SET stock = stock - 1 WHERE libros.libro_id = libro_id;
+    
+END//
+
+
+DELIMITER ;
+
+
+listar procedimientos y funciones:
+------------------------------------------
+SELECT routine_definition
+FROM information_schema.routines
+WHERE 
+routine_name = 'prestamo' AND routine_schema = 'libreria_cf';
+
+SELECT ROUTINE_SCHEMA, ROUTINE_NAME FROM information_schema.routines;
+---------------------------------------------------------------------
+llamar a un procedimiento:
+CALL nombreProcedimiento(par1,par2);
+CALL prestamo(3,20);
+Vemos si se agrego el prestamo del usuario 3 y del libro 20
+SELECT * FROM libros_usuarios;
+y luego se ve el stock disponible de ese libro;
+ SELECT * FROM libros WHERE libro_id= 20;
+
+eliminar un procedimiento:
+
+DROP PROCEDURE nombreProcedimiento;
+
+no es posible modificar un store procedure ya generado. Es necesario eliminarlo,editarlo y volver
+a generar.
+
+obtener valores de store procedure:
+
+no retornan valores los procedure
+toma un valor de entrada y lo modifica para que el usuario obtenga el valor ya modificado 
+para obtener valores despues de ejecutar un procedimiento almacenado se ultilizara la palabra OUT
+
+modificar el store procedure para saber cuantos libros quedaron en stock:
+
+
+
+

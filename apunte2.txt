@@ -1,0 +1,9 @@
+SELECT routine_definition
+FROM information_schema.routines
+WHERE 
+routine_name = 'prestamo' AND routine_schema = 'libreria_cf';
+
+
+SELECT ROUTINE_SCHEMA, ROUTINE_NAME FROM information_schema.routines;
+
+
