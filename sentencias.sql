@@ -127,12 +127,17 @@ VALUES (1, 'Carrie','1974-01-01'),
 VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
         ('Codi1', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
         ('Codi2', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
-        ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com');
-
+        ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
+        ('Patricio', 'Contreras', 'patorma', 'patorma@yahoo.com'),
+        ('Luis', 'Suarez', 'topo203', 'topo_2021@gmail.com');
 
 INSERT INTO libros_usuarios(libro_id, usuario_id)
 VALUES  (1, 1), (2, 1), (3, 1),
-        (55, 3), (55, 3), (55, 3);
+        (55, 3), (55, 3), (55, 3),
+        (55, 4), (55, 3), (55, 5),
+        (5, 3), (6, 2), (4, 6),
+         (12, 4), (12, 3), (3, 5),
+        (2, 4), (2, 6), (7, 5);
 -- DELETE FROM libros WHERE autor_id = 1;
 
 -- Obtener todos los libros cuyo titulo comienze con la letra h o con la letra l
@@ -163,4 +168,7 @@ WHERE fecha_publicacion BETWEEN '1995-01-01' AND'2015-01-31';
 
 SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La torre oscura 7 La torre oscura');
 
-SOURCE Downloads/zapateria/vistas.sql;
+-- SOURCE Downloads/zapateria/vistas.sql;
+UPDATE libros SET descripcion = 'no disponible' WHERE fecha_publicacion < '2000-01-01';
+UPDATE libros SET stock = 0 WHERE fecha_publicacion < '1995-01-01';
+
