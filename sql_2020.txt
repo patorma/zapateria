@@ -1296,6 +1296,82 @@ END//
 
 
 
+Transacciones
+bloqueo de tablas
+primer tipo de bloqueo ocuure cuando cualquier tipo de sentencia es ejecutada : una consulta,insercion,
+actualizacion y eliminacion 
+el segundo tipo ocurre cuando se ejecuta algunas de estas sentencias :insercion,actualizaciono eliminacion en 
+este tipo una conaulta no bloquea una bd (seguridad  que no se podra ejecutar una sentencia por otro 
+usuario hasta que la sentencia del usuario que origino la sentencia termine de ejecutarse)
+consistencvia de los datos y tiempo de ejecucion de las sentencias (desventajas de los dos tipos)
+en mysql se utilizan ambos mecanismos con el motor mysql excluimos las consultas y con el motor innodb
+todas las sentencias ocasionaran un bloqueo
+
+
+transacciones 
+el mecanismo que nos permite agrupar una n cantidad de sentencias sql en una sola de modo que todas o ninguna
+de las sentencias tengan exito una propiedad llamada atomicidad. Utilizar transacciones nos permite
+poder afectar a la bd de una forma segura en una transaccion podemos definir tres estados: un antes, un durante 
+y un despues de la transaccion ejemplo queremos retirar 50 millones de dolares de nuestra cuenta esto implica
+afectar a dos tablas (dos tablas cuentas y transacciones) antes de la transaccion se tiene 100 dolares en una transaccion
+los cambios hechos a una bd pueden ser revertidos dejando a la bd en su estado incial
+se usan siempre que queramos que un grupo de sentencias se ejecuten como una sola y solo se modificara de
+forma permanente a la bd siempre y cuando todas las sentencias hayan tenido exito
+
+Implementar transaction
+// se inicia con start y transaction
+START TRANSACTION;
+
+SET @libro_id = 20, @usuario_id = 3;
+
+UPDATE libros SET stock = stock - 1 WHERE libro_id = @libro_id;
+SELECT stock FROM libros WHERE libro_id = @libro_id;
+
+INSERT INTO libros_usuarios(libro_id, usuario_id) VALUES(@libro_id,@usuario_id); 
+SELECT * FROM libros_usuarios;
+
+// para terminar la transaccion 
+COMMIT; 
+// se regresa a un estado donde la transaccion aun no comenzaba
+// muy eficiente cuando ocuure un error en la transaccion
+ROLLBACK; 
+
+en la mayoria de los casos implementaremos transacciones dentro de los store procedures
+en este caso se modificara el store procedure prestamo para ejecutar una transaccion
+
+ DELIMITER  //
+CREATE PROCEDURE prestamo(usuario_id INT, libro_id INT )
+    -> BEGIN
+    ->     -- CON ESTO SE LE INDICA AL SERVIDOR DE BD QUE CUANDO OCURRA UN ERROR DENTRO DEL PROCEDURE
+    ->     -- ESTE FINALIZE NO SIN ANTES DE EJECUTAR TODO LO QUE SE ENCUENTRE DENTRO DEL BEGIN Y EL END
+    ->     --Ocurre un error
+    ->     DECLARE EXIT  HANDLER FOR SQLEXCEPTION
+    ->     BEGIN
+    ->          ROLLBACK;
+    ->     END;
+    ->
+    ->     START TRANSACTION;
+    ->
+    ->     INSERT INTO libros_usuarios(libro_id,usuario_id) VALUES (libro_id, usuario_id);
+    ->     UPDATE libros SET stock = stock - 1 WHERE libros.libro_id = libro_id;
+    ->
+      COMMIT;
+    
+    
+     END//
+
+DELIMITER ;
+
+
+ SELECT * FROM libros_usuarios;
+
+ SELECT stock FROM libros WHERE libro_id = 20;
+
+CALL prestamo(3,20);
+SELECT * FROM libros_usuarios;
+
+SELECT stock FROM libros WHERE libro_id = 20;
+
 
 
 
