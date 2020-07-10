@@ -1373,5 +1373,66 @@ SELECT * FROM libros_usuarios;
 SELECT stock FROM libros WHERE libro_id = 20;
 
 
+cursor en mysql
+---------------------------
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS facilito_procedure//
+CREATE PROCEDURE facilito_procedure()
+BEGIN
+
+  DECLARE var_id INTEGER;
+  DECLARE var_paginas INTEGER;
+  DECLARE var_titulo VARCHAR(255);
+  DECLARE var_final INTEGER DEFAULT 0;
+
+  DECLARE cursor1 CURSOR FOR SELECT libro_id, titulo, paginas FROM libros;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET var_final = 1;
+
+  OPEN cursor1;
+
+  bucle: LOOP
+
+    FETCH cursor1 INTO var_id, var_titulo, var_paginas;
+
+    IF var_final = 1 THEN
+      LEAVE bucle;
+    END IF;
+
+    UPDATE libros SET paginas = var_paginas + 10 WHERE libro_id = var_id;
+
+    SELECT
+      var_titulo AS  'titulo',
+      var_paginas AS 'Anterior',
+      paginas AS 'Incremento'
+      FROM libros WHERE libro_id = var_id;
 
 
+  END LOOP bucle;
+  CLOSE cursor1;
+
+END//
+DELIMITER ;
+
+trigger
+------------
+vamos agregar una nuena columna a la tabal autores va a tener como nombre cantidad de libros
+ la idea de esta columna es que cada vez que ingresemos un registro en la tabla autores esta columna 
+ aumente en uno dependiendo del autor es decir , si nosotros insertamos un libro del autor Stephen King
+entonces el registro Stephen King debe de aumentar en un o su columna cantidad_libros para lograr esto trabajaremos
+con trigger y trabajaremos con el elemento insert 
+
+El formato de creacion de un trigger es el siguiente:
+
+CREATE TRIGGER after_insert_actualizacion_libros
+// el tiempo (antes o despues) + evento + tabla a asociar
+AFTER INSERT ON libros
+// Define lo que se ejecutara una vez que el trigger se ha activado lo cual ocurre una vez 
+// por cada regsitro afectado 
+FOR EACH ROW 
+BEGIN 
+    // el NEW hace referencia al registro actual , al registro que se ha insertado 
+    UPDATE autores SET cantidad_libros = cantidad_libros + 1 WHERE autor_id = NEW.autor_id;
+END;

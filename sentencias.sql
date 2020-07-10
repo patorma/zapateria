@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS autores(
   fecha_nacimiento DATE NOT NULL,
   pais_origen VARCHAR(40) NOT NULL,
   fecha_creacion DATETIME DEFAULT current_timestamp
-);
+)ENGINE=InnoDB;
+
+ALTER TABLE autores ADD COLUMN cantidad_libros INT DEFAULT 0; 
 
 CREATE TABLE libros(
   libro_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -23,7 +25,7 @@ CREATE TABLE libros(
   fecha_publicacion Date NOT NUll,
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE usuarios(
   usuario_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -32,7 +34,7 @@ CREATE TABLE usuarios(
   username varchar(25) NOT NULL,
   email varchar(50) NOT NULL,
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+)ENGINE=InnoDB;
 CREATE TABLE libros_usuarios(
   libro_id INT UNSIGNED NOT NULL,
   usuario_id INT UNSIGNED NOT NULL,
@@ -40,7 +42,7 @@ CREATE TABLE libros_usuarios(
   FOREIGN KEY (libro_id) REFERENCES libros(libro_id),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+)ENGINE=InnoDB;
 
 -- Eliminar en cascada segunda forma de declararlo
 -- ALTER TABLE ADD FOREIGN KEY (autor_id) REFERENCES autores(autor_id) ON DELETE CASCADE
@@ -171,4 +173,5 @@ SELECT * FROM libros WHERE titulo IN ('Ojos de fuego', 'Cujo','El hobbit','La to
 -- SOURCE Downloads/zapateria/vistas.sql;
 UPDATE libros SET descripcion = 'no disponible' WHERE fecha_publicacion < '2000-01-01';
 UPDATE libros SET stock = 0 WHERE fecha_publicacion < '1995-01-01';
+
 

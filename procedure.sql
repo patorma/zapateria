@@ -80,3 +80,8 @@ DELIMITER ;
 -- SELECT @cantidad;
 
 
+CREATE EVENT libros_gy
+ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+DO
+SET @cantidad = -1;
+CALL prestamo(3,20,@cantidad);
