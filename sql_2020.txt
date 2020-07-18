@@ -1436,3 +1436,29 @@ BEGIN
     // el NEW hace referencia al registro actual , al registro que se ha insertado 
     UPDATE autores SET cantidad_libros = cantidad_libros + 1 WHERE autor_id = NEW.autor_id;
 END;
+//
+un nuevo trigger que permita decrecer la columna cantidad_libros siempre que un libro sea eliminado
+de nuestra bd
+CREATE TRIGGER after_delete_actualizacion_libros
+AFTER DELETE ON libros
+FOR EACH ROW
+BEGIN
+    // OLD hace referencia al registro eliminado
+    UPDATE autores SET cantidad_libros = cantidad_libros - 1 WHERE autor_id = OLD.autor_id;
+END; 
+//
+
+generar nuevo trigger el cual se ejecute cuando se actualize un registro de la tabla libros si el libro 
+modifica a su autor entonces el trigger va a decrecer en 1 la columna cantidad_libros del viejo autor y
+va a incrementar en 1 la cantidad_libros del nuevo autor :
+
+CREATE TRIGGER after_update_actualizacion_libros
+AFTER UPDATE ON libros
+FOR EACH ROW 
+BEGIN 
+     // El registro despues de la actualizacion (NEW) y el registro antes de la actualñizacion(OLD)
+     // es decir si hubo un cambio en dicha columna entonces 
+    IF(NEW.autor_id != OLD.autor_id) THEN
+    
+END; 
+//

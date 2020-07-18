@@ -35,6 +35,7 @@ CREATE TABLE usuarios(
   email varchar(50) NOT NULL,
   fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
 )ENGINE=InnoDB;
+
 CREATE TABLE libros_usuarios(
   libro_id INT UNSIGNED NOT NULL,
   usuario_id INT UNSIGNED NOT NULL,
@@ -125,6 +126,7 @@ VALUES (1, 'Carrie','1974-01-01'),
       (8, 'Festin de cuervos','2011-07-12'),
       (8, 'Danza de dragones','2011-07-12');
 
+
       INSERT INTO usuarios (nombre, apellidos, username, email)
 VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
         ('Codi1', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
@@ -132,6 +134,9 @@ VALUES  ('Eduardo', 'García', 'eduardogpg', 'eduardo@codigofacilito.com'),
         ('Codi3', 'Facilito', 'codigofacilito', 'ayuda@codigofacilito.com'),
         ('Patricio', 'Contreras', 'patorma', 'patorma@yahoo.com'),
         ('Luis', 'Suarez', 'topo203', 'topo_2021@gmail.com');
+        
+INSERT INTO libros(autor_id,titulo,fecha_publicacion) VALUES(1,'El misterio de Salems Lot', '1975-10-17');
+INSERT INTO libros(autor_id,titulo,fecha_publicacion) VALUES(1,'Area 81', '2011-09-01');
 
 INSERT INTO libros_usuarios(libro_id, usuario_id)
 VALUES  (1, 1), (2, 1), (3, 1),

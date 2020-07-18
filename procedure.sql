@@ -22,6 +22,13 @@ BEGIN
     
 END//
 
+
+CREATE PROCEDURE insertar_cantidad(id INT)
+BEGIN
+     SET @cantidad = (SELECT COUNT(l.autor_id) FROM libros AS l WHERE l.autor_id = id);
+     UPDATE autores SET cantidad_libros = @cantidad WHERE autor_id = id;
+END//
+
 CREATE PROCEDURE tipo_lector(usuario_id INT)
 BEGIN
 
@@ -85,3 +92,5 @@ ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
 DO
 SET @cantidad = -1;
 CALL prestamo(3,20,@cantidad);
+
+

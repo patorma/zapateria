@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS facturacion(
     fecha_facturacion DATE NOT NULL,
     impuesto DECIMAL(5,2) NOT NULL,
     identificacion_clientes INT  UNSIGNED NOT NULL,
-    id_producto INT  UNSIGNED NOT NULL,
+    id_producto INT  UNSIGNED NOT NULL
     FOREIGN KEY(id_producto) REFERENCES productos(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY(identificacion_clientes) REFERENCES clientes(identificacion)
